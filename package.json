@@ -1,0 +1,55 @@
+{
+  "name": "nightlife",
+  "version": "1.0.0",
+  "description": "Nightlife Coordination App",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "npm-run-all --parallel dev:watch lint:watch",
+    "dev:watch": "nodemon server/index.js",
+    "lint": "esw server",
+    "lint:watch": "npm run lint -- --watch",
+    "test": "export NODE_ENV=test && mocha server/**/*.test.js",
+    "test:watch": "npm run test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cassv24/nightlife.git"
+  },
+  "keywords": [
+    "Vue",
+    "Vuex",
+    "Express"
+  ],
+  "author": "Fausto R.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cassv24/nightlife/issues"
+  },
+  "homepage": "https://github.com/cassv24/nightlife#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.0",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.12.2",
+    "validator": "^9.0.0",
+    "yelp-fusion": "^1.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.8.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-watch": "^3.1.3",
+    "expect": "^21.2.1",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.1",
+    "npm-run-all": "^4.1.1",
+    "supertest": "^3.0.0"
+  }
+}

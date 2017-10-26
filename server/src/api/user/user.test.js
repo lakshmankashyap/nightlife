@@ -1,6 +1,6 @@
 const expect = require('expect');
 const request = require('supertest');
-const { app } = require('../../index');
+const { app } = require('../../../index');
 const User = require('./user.model');
 const { users } = require('../../config/seed');
 

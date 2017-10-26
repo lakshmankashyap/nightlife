@@ -4,12 +4,12 @@
   "description": "Nightlife Coordination App",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node index.js",
     "dev": "npm-run-all --parallel dev:watch lint:watch",
-    "dev:watch": "nodemon server/index.js",
-    "lint": "esw server",
+    "dev:watch": "nodemon index.js",
+    "lint": "esw src",
     "lint:watch": "npm run lint -- --watch",
-    "test": "export NODE_ENV=test && mocha server/**/*.test.js",
+    "test": "export NODE_ENV=test && mocha src/**/*.test.js",
     "test:watch": "npm run test -- --watch"
   },
   "repository": {

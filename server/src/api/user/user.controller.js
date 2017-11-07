@@ -2,12 +2,11 @@ const _ = require('lodash');
 const User = require('./user.model');
 
 const me = (req, res) => {
-  res.send({ user: req.user });
+  res.send(req.user);
 };
 
 const create = (req, res) => {
   let body = _.pick(req.body, ['email', 'password']);
-
   if (_.isEmpty(body.email) || _.isEmpty(body.password)) {
     return res.status(400).send({errors: ['Some of the fields are not set.']});
   }

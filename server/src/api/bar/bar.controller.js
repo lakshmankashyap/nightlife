@@ -10,6 +10,7 @@ let client = token.then((accessToken) => {
   return yelp.client(accessToken);
 });
 
+// Could refactor moving this function to the model
 function find (item) {
   let bar = Bar.findOne({
     bar_id: item.id

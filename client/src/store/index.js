@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { isEmpty } from 'lodash'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    session: { isAuthenticated: false }
+    session: { isAuthenticated: false },
+    search: ''
   },
   getters: {
     isAuthenticated (state) {
@@ -25,9 +27,23 @@ export const store = new Vuex.Store({
     },
     removeSession: (state) => {
       state.session = Object.assign({}, { isAuthenticated: false })
+    },
+    setSearch (state, payload) {
+      state.search = payload.location
     }
   },
   actions: {
+    searchForBars (context, payload) {
+      let { location } = payload
+      if (!isEmpty(location)) {
+        let encoded = encodeURI(location)
+        context.commit('setSearch', { location })
+        return axios.get(`http://localhost:3000/api/bars/?location=${encoded}`)
+          .then(res => {
+            return res
+          }).catch(err => { throw (err) })
+      }
+    },
     login: ({ commit }, payload) => {
       const { email, password } = payload
       return axios.post('http://localhost:3000/api/users/login', { email, password })

@@ -35,8 +35,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { isEmpty } from 'lodash'
+// import axios from 'axios'
 import BarList from '@/components/bar/BarList'
 
 export default {
@@ -54,27 +53,21 @@ export default {
   },
   methods: {
     searchForBars () {
-      if (!isEmpty(this.location)) {
-        let encoded = encodeURI(this.location)
-        this.bars = []
-        this.isLoading = true
-        axios.get(`http://localhost:3000/api/bars/?location=${encoded}`)
-          .then(res => {
-            this.bars = res.data
-            this.isLoading = false
-          }).catch(err => console.log(err))
-      }
+      this.bars = []
+      this.isLoading = true
+      this.$store.dispatch('searchForBars', { location: this.location })
+        .then(res => {
+          this.bars = res.data
+          this.isLoading = false
+        }).catch(err => console.log(err))
     }
   },
   created () {
-    // let aos = axios.create({
-    //   baseURL: 'https://localhost:3000/api/',    })
-    this.isLoading = true
-    axios.get('http://localhost:3000/api/bars/?location=San%20Francisco')
-      .then(res => {
-        this.bars = res.data
-        this.isLoading = false
-      }).catch(err => console.log(err))
+    let { search } = this.$route.query
+    if (search) {
+      this.location = search
+    }
+    this.searchForBars()
   }
 }
 </script>

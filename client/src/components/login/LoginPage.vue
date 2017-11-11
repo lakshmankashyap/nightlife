@@ -62,7 +62,7 @@ export default {
       const { email, password } = this
       this.$store.dispatch('login', { email, password })
         .then(res => {
-          this.$router.push({ path: '/' })
+          this.$router.push({path: '/', query: { search: this.$store.state.search }})
         })
         .catch(err => { console.log('error was', err) })
     }

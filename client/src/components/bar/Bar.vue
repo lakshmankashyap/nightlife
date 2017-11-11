@@ -45,12 +45,16 @@ export default {
   },
   methods: {
     vote () {
-      const token = localStorage.getItem('x-auth')
-      axios.post('http://localhost:3000/api/bars/vote', { bar_id: this.bar.bar_id }, { headers: { 'x-auth': token } })
-        .then(res => {
-          this.bar.voters = res.data.bar.voters
-          this.votes = this.bar.voters.length
-        }).catch(err => { console.log(err) })
+      if (this.$store.getters.isAuthenticated) {
+        const token = localStorage.getItem('x-auth')
+        axios.post('http://localhost:3000/api/bars/vote', { bar_id: this.bar.bar_id }, { headers: { 'x-auth': token } })
+          .then(res => {
+            this.bar.voters = res.data.bar.voters
+            this.votes = this.bar.voters.length
+          }).catch(err => { console.log(err) })
+      } else {
+        this.$router.push({path: '/login'})
+      }
     }
   },
   created () {

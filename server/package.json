@@ -21,6 +21,9 @@
     "Vuex",
     "Express"
   ],
+  "engines": {
+    "node": "8.8.1"
+  },
   "author": "Fausto R.",
   "license": "MIT",
   "bugs": {

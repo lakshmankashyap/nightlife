@@ -5,6 +5,10 @@ import { isEmpty } from 'lodash'
 
 Vue.use(Vuex)
 
+const axiosInst = axios.create({
+  baseURL: '/api/' // http://localhost:3000/api/
+})
+
 export const store = new Vuex.Store({
   state: {
     session: { isAuthenticated: false },
@@ -33,12 +37,20 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    vote (context, payload) {
+      let { bar } = payload
+      const token = localStorage.getItem('x-auth')
+      return axiosInst.post('/bars/vote', { bar_id: bar.bar_id }, { headers: { 'x-auth': token } }) // axios.post('http://localhost:3000/api/bars/vote', { bar_id: this.bar.bar_id }, { headers: { 'x-auth': token } })
+        .then(res => {
+          return res
+        }).catch(err => { throw (err) })
+    },
     searchForBars (context, payload) {
       let { location } = payload
       if (!isEmpty(location)) {
         let encoded = encodeURI(location)
         context.commit('setSearch', { location })
-        return axios.get(`http://localhost:3000/api/bars/?location=${encoded}`)
+        return axiosInst.get(`/bars/?location=${encoded}`) // axios.get(`http://localhost:3000/api/bars/?location=${encoded}`)
           .then(res => {
             return res
           }).catch(err => { throw (err) })
@@ -46,7 +58,7 @@ export const store = new Vuex.Store({
     },
     login: ({ commit }, payload) => {
       const { email, password } = payload
-      return axios.post('http://localhost:3000/api/users/login', { email, password })
+      return axiosInst.post('/users/login', { email, password }) // axios.post('http://localhost:3000/api/users/login', { email, password })
         .then(res => {
           const session = Object.assign({}, res.data, { isAuthenticated: true })
           localStorage.setItem('x-auth', res.headers['x-auth'])
@@ -57,7 +69,7 @@ export const store = new Vuex.Store({
     logout: (context) => {
       const token = localStorage.getItem('x-auth')
       if (token) {
-        axios.get('http://localhost:3000/api/users/logout', { headers: { 'x-auth': token } })
+        axiosInst.get('/users/logout', { headers: { 'x-auth': token } }) // axios.get('http://localhost:3000/api/users/logout', { headers: { 'x-auth': token } })
           .then(res => {
             localStorage.removeItem('x-auth')
             context.commit('removeSession')
@@ -68,22 +80,18 @@ export const store = new Vuex.Store({
     },
     createAccount ({commit}, payload) {
       const { email, password, passwordRepeat } = payload
-      axios.post('http://localhost:3000/api/users/', {
-        email,
-        password,
-        passwordRepeat
-      }).then(res => {
-        const session = Object.assign({}, res.data, { isAuthenticated: true })
-        localStorage.setItem('x-auth', res.headers['x-auth'])
-        commit('setSession', session)
-        return res
-      }).catch(err => { throw (err) })
+      axiosInst.post('/users/', {email, password, passwordRepeat}) // axios.post('http://localhost:3000/api/users/', {email, password, passwordRepeat})
+        .then(res => {
+          const session = Object.assign({}, res.data, { isAuthenticated: true })
+          localStorage.setItem('x-auth', res.headers['x-auth'])
+          commit('setSession', session)
+          return res
+        }).catch(err => { throw (err) })
     },
     loadSession ({commit}) {
       const token = localStorage.getItem('x-auth')
       if (token) {
-        axios
-          .get('http://localhost:3000/api/users/me', { headers: { 'x-auth': token } })
+        axiosInst.get('/users/me', { headers: { 'x-auth': token } }) // axios.get('http://localhost:3000/api/users/me', { headers: { 'x-auth': token } })
           .then(res => {
             const session = Object.assign({}, res.data, {
               isAuthenticated: true
